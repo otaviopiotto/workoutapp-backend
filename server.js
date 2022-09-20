@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const userRoutes = require("./routes/userRoutes");
@@ -8,13 +9,10 @@ const DB_USER = "otaviopiotto";
 
 const DB_PASS = encodeURIComponent("2DkswC3FCqrwvMYz");
 
-const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/8000";
 
 const options = {
   useNewUrlParser: true,
-  useCreateIndex: true,
-  useFindAndModify: false,
-  family: 4, // Use IPv4, skip trying IPv6
 };
 
 const uri = `mongodb+srv://${DB_USER}:${DB_PASS}@workoutapp.iuzexsr.mongodb.net/?retryWrites=true&w=majority`;
@@ -33,7 +31,6 @@ app.use("/user", userRoutes);
 app.get("/", (req, res) => {
   res.json({ message: "teste" });
 });
-
 mongoose.connect(MONGODB_URI, options);
 
 // mongoose
