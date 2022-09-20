@@ -1,0 +1,10 @@
+{
+    "name": "WorkoutApp",
+    "type": "mongodb-atlas",
+    "config": {
+        "clusterName": "WorkoutApp",
+        "readPreference": "primary",
+        "wireProtocolEnabled": true
+    },
+    "version": 1
+}
