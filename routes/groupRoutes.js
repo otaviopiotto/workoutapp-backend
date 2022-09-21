@@ -5,7 +5,7 @@ router.get("/:id", async (req, res) => {
   const _id = req.params.id;
 
   try {
-    const group = await Group.findById(_id);
+    const group = await Group.findOne({ _id });
 
     res.status(201).json(group);
   } catch (err) {
@@ -26,11 +26,14 @@ router.post("/:id", async (req, res) => {
 
   try {
     const create = await Group.create(group).then((e) => {
-      return User.findOneAndUpdate(_id, {
-        $addToSet: {
-          group: e._id,
-        },
-      });
+      return User.findOneAndUpdate(
+        { _id },
+        {
+          $addToSet: {
+            group: e._id,
+          },
+        }
+      );
     });
 
     res.status(201).json({ data: create });
