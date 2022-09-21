@@ -31,7 +31,9 @@ app.use("/user", userRoutes);
 app.get("/", (req, res) => {
   res.json({ message: "teste" });
 });
-mongoose.connect(MONGODB_URI, options);
+mongoose.connect(MONGODB_URI, options).then(() => console.log("running"));
+
+app.listen(process.env.PORT || 8000);
 
 // mongoose
 //   .connect(uri)

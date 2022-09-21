@@ -4,7 +4,8 @@
   "description": "backend for my workoutapp",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./server.js"
   },
   "author": "Otávio Piotto",
   "license": "MIT",
