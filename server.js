@@ -5,17 +5,11 @@ const userRoutes = require("./routes/userRoutes");
 const cors = require("cors");
 const app = express();
 
-const DB_USER = "otaviopiotto";
-
-const DB_PASS = encodeURIComponent("2DkswC3FCqrwvMYz");
-
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/8000";
+const MONGODB_URI = process.env.MONGODB_URI || "http://localhost:8000";
 
 const options = {
   useNewUrlParser: true,
 };
-
-const uri = `mongodb+srv://${DB_USER}:${DB_PASS}@workoutapp.iuzexsr.mongodb.net/?retryWrites=true&w=majority`;
 
 app.use(
   express.urlencoded({
@@ -34,11 +28,3 @@ app.get("/", (req, res) => {
 mongoose.connect(MONGODB_URI, options).then(() => console.log("running"));
 
 app.listen(process.env.PORT || 8000);
-
-// mongoose
-//   .connect(uri)
-//   .then(() => {
-//     app.listen(8000);
-//     console.log("Conectado");
-//   })
-//   .catch((err) => console.log(err));

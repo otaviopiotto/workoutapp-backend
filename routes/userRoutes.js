@@ -6,28 +6,28 @@ const jwt = require("jsonwebtoken");
 const JWT_SECRET = "fskdjbk242&*@#*&@¨*)@(#";
 
 const groupRoutes = require("./groupRoutes");
-router.use("/group", groupRoutes);
 
-router.post("/change-password", async (req, res) => {
-  const { token, newPassword } = req.body;
+// router.post("/login", async (req, res) => {
+//   const { username, password } = req.body;
 
-  try {
-    const user = jwt.verify(token, JWT_SECRET);
-    const _id = user._id;
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
+//   const user = await User.findOne({ username }).lean();
 
-    await User.updateOne(
-      { _id },
-      {
-        $set: { password: hashedPassword },
-      }
-    );
+//   if (!user) {
+//     return res.json({ status: "error", error: "Usuário ou Senha Inválido" });
+//   }
 
-    res.json({ status: "ok" });
-  } catch (err) {
-    res.status(500).json({ error: err });
-  }
-});
+//   if (await bcrypt.compare(password, user.password)) {
+//     const token = jwt.sign(
+//       { id: user._id, username: user.username },
+//       JWT_SECRET,
+//       { subject: user._id, expiresIn: "10d" }
+//     );
+
+//     return res.status(200).json({ user, token });
+//   }
+
+//   return res.json({ status: "error", error: "Usuário ou Senha Inválido" });
+// });
 
 router.post("/login", async (req, res) => {
   const { username, password } = req.body;
@@ -60,6 +60,60 @@ router.post("/register", async (req, res) => {
   try {
     const userReq = await User.create(user);
     res.status(201).json(userReq);
+  } catch (err) {
+    if (err.code === 11000) {
+      return res
+        .status(500)
+        .json({ error: "Nome de Usuário já cadastrado", code: 11000 });
+    }
+    res.status(500).json({ error: err });
+  }
+});
+
+// async function ensureUserAuthenticated(request, _response, next) {
+//   const authHeader = request.headers.authorization;
+
+//   if (!authHeader) {
+//     throw new AppError("Token JWT inválido");
+//   }
+
+//   const [, token] = authHeader.split(" ");
+
+//   try {
+//     const decoded = verify(token, JWT_SECRET);
+//     const { sub: userId } = decoded;
+
+//     const user = await User.findOne({ _id: userId });
+//     if (!user) throw new AppError("Token JWT inválido");
+
+//     request.user = { _id: user._id };
+
+//     // return next();
+//   } catch (err) {
+//     throw new AppError("Token JWT inválido");
+//   }
+// }
+
+// router.use(ensureUserAuthenticated);
+
+router.use("/group", groupRoutes);
+
+router.post("/change-password", async (req, res) => {
+  const { token, newPassword } = req.body;
+
+  try {
+    // const user = jwt.verify(token, JWT_SECRET);
+    // const _id = user._id;
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    await User.updateOne(
+      { _id: req.user._id },
+      {
+        $set: { password: hashedPassword },
+      }
+    );
+
+    res.json({ status: "ok" });
   } catch (err) {
     res.status(500).json({ error: err });
   }
