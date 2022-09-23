@@ -2,7 +2,8 @@ const router = require("express").Router();
 const { User } = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
+const multer = require("multer");
+const multerConfig = require("../config/multer");
 const JWT_SECRET = "fskdjbk242&*@#*&@¨*)@(#";
 
 const groupRoutes = require("./groupRoutes");
@@ -49,6 +50,14 @@ router.post("/login", async (req, res) => {
 
   return res.json({ status: "error", error: "Usuário ou Senha Inválido" });
 });
+
+// router.post(
+//   "/upload/image",
+//   multer(multerConfig).single("file"),
+//   (req, res) => {
+//     console.log(req.file);
+//   }
+// );
 
 router.post("/register", async (req, res) => {
   const { name, username, password: pass } = req.body;
@@ -144,13 +153,13 @@ router.get("/:id", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   const _id = req.params.id;
-  const { title, description, days } = req.body;
+  const { name, username } = req.body;
 
-  const group = { title, description, days };
+  const user = { name, username };
 
   try {
-    const update = await User.updateOne({ _id }, group);
-    res.status(200).json(update);
+    await User.updateOne({ _id }, user);
+    return res.json({ status: "ok", data: user });
   } catch (err) {
     res.status(500).json({ error: err });
   }
