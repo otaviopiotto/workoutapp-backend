@@ -111,12 +111,12 @@ router.post("/change-password", async (req, res) => {
   const { token, newPassword } = req.body;
 
   try {
-    // const user = jwt.verify(token, JWT_SECRET);
-    // const _id = user._id;
+    const user = jwt.verify(token, JWT_SECRET);
+    const _id = user._id;
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
     await User.updateOne(
-      { _id: req.user._id },
+      { _id },
       {
         $set: { password: hashedPassword },
       }

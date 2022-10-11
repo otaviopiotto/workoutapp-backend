@@ -16,6 +16,13 @@ router.get("/:id", async (req, res) => {
 router.post("/:id", async (req, res) => {
   const _id = req.params.id;
 
+  if (!_id) {
+    res
+      .status(500)
+      .json({ error: "Usuário não encontrado, atualize a página!" });
+    return;
+  }
+
   const { title, description, days } = req.body;
 
   const group = { title, description, days };
