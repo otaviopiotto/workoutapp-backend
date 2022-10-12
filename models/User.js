@@ -21,6 +21,13 @@ const groupSchema = new mongoose.Schema({
 
 const userSchema = new mongoose.Schema({
   username: { type: String, require: true, unique: true },
+  profile_picture: {
+    name: String,
+    size: String,
+    url: String,
+    key: String,
+    fileName: String,
+  },
   name: { type: String, require: true },
   password: { type: String, require: true },
   group: [{ type: mongoose.Types.ObjectId, ref: "Group" }],

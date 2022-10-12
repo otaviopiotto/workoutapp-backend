@@ -57,21 +57,21 @@ router.delete("/:id", async (req, res) => {
   }
 
   try {
-    await User.findOneAndUpdate(
-      { "group._id": _id },
-      {
-        $unset: {
-          "group.$[a]": "",
-        },
-      },
-      {
-        arrayFilters: [
-          {
-            "a._id": _id,
-          },
-        ],
-      }
-    );
+    // await User.findOneAndUpdate(
+    //   { "group._id": _id},
+    //   {
+    //     $unset: {
+    //       "group.$[a]": "",
+    //     },
+    //   },
+    //   {
+    //     arrayFilters: [
+    //       {
+    //         "a._id": _id,
+    //       },
+    //     ],
+    //   }
+    // );
     const deleteGroup = await Group.deleteOne({ _id }, { new: true });
 
     res.status(200).json(deleteGroup);

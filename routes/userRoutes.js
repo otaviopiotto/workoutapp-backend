@@ -51,13 +51,38 @@ router.post("/login", async (req, res) => {
   return res.json({ status: "error", error: "Usuário ou Senha Inválido" });
 });
 
-// router.post(
-//   "/upload/image",
-//   multer(multerConfig).single("file"),
-//   (req, res) => {
-//     console.log(req.file);
-//   }
-// );
+router.post(
+  "/upload/image/:id",
+  multer(multerConfig).single("file"),
+  async (req, res) => {
+    const _id = req.params.id;
+    const {
+      originalname: name,
+      size,
+      filename: key,
+      location: url = "",
+    } = req.file;
+
+    try {
+      const upload = await User.updateOne(
+        { _id },
+        {
+          $set: {
+            profile_picture: {
+              name,
+              size,
+              key,
+              url,
+            },
+          },
+        }
+      );
+      return res.json(upload);
+    } catch (err) {
+      res.status(500).json({ error: err });
+    }
+  }
+);
 
 router.post("/register", async (req, res) => {
   const { name, username, password: pass } = req.body;
