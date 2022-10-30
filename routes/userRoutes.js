@@ -35,8 +35,12 @@ router.post("/login", async (req, res) => {
 
   const user = await User.findOne({ username }).lean();
 
+  console.log(user);
+
   if (!user) {
-    return res.json({ status: "error", error: "Usuário ou Senha Inválido" });
+    return res
+      .status(500)
+      .json({ status: "error", error: "Usuário ou Senha Inválido" });
   }
 
   if (await bcrypt.compare(password, user.password)) {
@@ -48,7 +52,9 @@ router.post("/login", async (req, res) => {
     return res.status(200).json({ user, token });
   }
 
-  return res.json({ status: "error", error: "Usuário ou Senha Inválido" });
+  return res
+    .status(500)
+    .json({ status: "error", error: "Usuário ou Senha Inválido" });
 });
 
 router.post(
@@ -88,7 +94,7 @@ router.post("/register", async (req, res) => {
   const { name, username, password: pass } = req.body;
 
   const password = await bcrypt.hash(pass, 10);
-
+  username = username.replaceAll(" ", "");
   const user = { name, password, username };
 
   try {
