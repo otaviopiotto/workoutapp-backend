@@ -67,7 +67,7 @@ router.post(
     } = req.file;
 
     try {
-      const upload = await User.updateOne(
+      await User.updateOne(
         { _id },
         {
           $set: {
@@ -80,7 +80,7 @@ router.post(
           },
         }
       );
-      return res.json(upload);
+      return res.status(200).json({ data: { file: { url, key, name, size } } });
     } catch (err) {
       res.status(500).json({ error: err });
     }
