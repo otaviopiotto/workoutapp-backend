@@ -28,3 +28,5 @@ app.get("/", (req, res) => {
 mongoose.connect(MONGODB_URI, options).then(() => console.log("running"));
 
 app.listen(process.env.PORT || 8000);
+
+module.exports = app;

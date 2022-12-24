@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const aws = require("aws-sdk");
+const s3 = new aws.S3();
 
 const exerciseSchema = new mongoose.Schema({
   exercise: String,
@@ -31,6 +33,13 @@ const userSchema = new mongoose.Schema({
   name: { type: String, require: true },
   password: { type: String, require: true },
   group: [{ type: mongoose.Types.ObjectId, ref: "Group" }],
+});
+
+userSchema.pre("updateOne", () => {
+  s3.deleteObject({
+    Bucket: "upload-picture-workoutapp",
+    Key: this.profile_picture.key,
+  }).promise();
 });
 
 const Group = mongoose.model("Group", groupSchema);
